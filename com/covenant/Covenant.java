@@ -38,7 +38,6 @@ public class Covenant extends Activity {
 		em.endTransaction();
 		System.out.println("Total time is :"+ (endTime-startTime));
 		
-		
 		List<DayEntry> dayEntries = em.fetchBy(new DayEntry(), "steps > 4500 AND steps < 100000");
 		DayEntry dayEntry = em.fetchOneByPK(new DayEntry(), 1);
 		
@@ -52,7 +51,6 @@ public class Covenant extends Activity {
 		List<DayEntry> dayEntries2 = em.fetchBy(new DayEntry(), "id > 0");
 		endTime = System.currentTimeMillis();
 		System.out.println("Total time is :"+ (endTime-startTime));
-		
 		
 		System.out.println(dayEntries2);
     }
