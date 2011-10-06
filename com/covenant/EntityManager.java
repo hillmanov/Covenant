@@ -101,8 +101,6 @@ public class EntityManager {
 	}
 
 	public <T> T fetchOneByPK(T entity, long pkValue) {
-		String table = entity.getClass().getAnnotation(Entity.class).table();
-
 		List<Pair<Field, Column>> fieldColumnPairs = this._getColumns(entity.getClass());
 		Field pkColumn = this._getPK(fieldColumnPairs);
 		String pkColumnName = pkColumn.getAnnotation(Column.class).name().toString();
