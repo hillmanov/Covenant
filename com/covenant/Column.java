@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface EntityField {
+public @interface Column {
 	boolean PK() default false;
-	String column();
+	String name();
 }

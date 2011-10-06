@@ -1,15 +1,15 @@
 package com.covenant;
 
-@Entity(tableName = "day_entry")
+@Entity(table = "day_entry")
 public class DayEntry {
 	
-	@EntityField(PK = true, column = "id")
+	@Column(PK = true, name = "id")
 	private long id;
 	
-	@EntityField(column = "date")
+	@Column(name = "date")
 	private String date;
 	
-	@EntityField(column = "steps")
+	@Column(name = "steps")
 	private int steps;
 
 	public long getId() {
