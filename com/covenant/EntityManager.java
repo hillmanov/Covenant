@@ -87,6 +87,23 @@ public class EntityManager {
 		}
 	}
 	
+	public <T> int delete(Object entity) {
+		Class<? extends Object> entityClassType = entity.getClass();
+		_verifyIsEntity(entityClassType);
+		
+		List<Pair<Field, Column>> fieldColumnPairs = this._getColumns(entityClassType);
+		Field pkColumn = this._getPK(fieldColumnPairs);
+		
+		try {
+			return this.deleteByPk(entity, pkColumn.getLong(entity));
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		}
+		return -1;
+	}
+	
 	public void execSQL(String sql) {
 		this._dbManager.getDb().execSQL(sql);
 	}
@@ -131,6 +148,24 @@ public class EntityManager {
 	
 		return fetchFromCursor(entityClass, c);
 	}
+	
+	public <T> int deleteByPk(T entityClass, long pkValue) {
+		_verifyIsEntity(entityClass.getClass());
+		String table = entityClass.getClass().getAnnotation(Entity.class).table();
+		
+		List<Pair<Field, Column>> fieldColumnPairs = this._getColumns(entityClass.getClass());
+		Field pkColumn = this._getPK(fieldColumnPairs);
+		String pkColumnName = pkColumn.getAnnotation(Column.class).name().toString();
+
+		return this._dbManager.getDb().delete(table, pkColumnName + " =?", new String[] { Long.toString(pkValue) });
+	}
+	
+	public <T> int deleteWhere(T entityClass, String whereClause) {
+		_verifyIsEntity(entityClass.getClass());
+		String table = entityClass.getClass().getAnnotation(Entity.class).table();
+
+		return this._dbManager.getDb().delete(table, whereClause, null);
+	}
 		
 	public void startTransaction() {
 		this._dbManager.getDb().beginTransaction();
@@ -156,10 +191,8 @@ public class EntityManager {
 		return pkColumn;
 	}
 	
-	private void _verifyIsEntity(Class<? extends Object> entityClassType) {
-		if (entityClassType.getAnnotation(Entity.class) == null) {
-			System.out.println("No an entity!");
-		}
+	private boolean _verifyIsEntity(Class<? extends Object> entityClassType) {
+		return entityClassType.isAnnotationPresent(Entity.class);
 	}
 	
 	@SuppressWarnings("unchecked")
