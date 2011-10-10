@@ -112,11 +112,21 @@ That's it. em.save returns true on successful insertion, or false if it failed.
 	unseenCQ.setLimit(limit);
 	List<DayEntry> entries = em.fetchBy(new DayEntry(), customCQ);
 
+## Want to delete some items?\ ##
+
+### Pass in the object you want to delete ###
+    em.delete(dayEntry);
+
+### By PK Key ###
+    em.deleteByPK(new DayEntry(), 1);
+    
+### By a custom where clause ###
+    em.deleteBy(new DayEntry(), "steps > 4500 AND steps < 100000");
+    
 ### What does it NOT do? ###
 
-Lots. It is meant to be simple wihthout lots of bells and whistles. 
+Lots. It is meant to be simple wihthout lots of bells and whistles. However, the biggest missing piece is:
 
-* Currently, it doesn't support deleting an object. This is necessary, I just haven't gotten around to it.
 * Relationships. No joins, nothing. I am trying to keep the code and implementation simple, that would make it not simple. 
 
 ### Like the idea, but don't like my code? ###
