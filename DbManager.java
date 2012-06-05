@@ -48,6 +48,7 @@ public class DbManager extends SQLiteOpenHelper {
 				SQLiteDatabase.CREATE_IF_NECESSARY, 
 				null
 			);
+		//db.execSQL("CREATE TABLE IF NOT EXISTS android_metadata (locale TEXT DEFAULT 'en_US');");
 	}
 
 	public DbManager(Context context, int mode, String resource) {

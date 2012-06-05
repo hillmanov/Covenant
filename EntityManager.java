@@ -46,12 +46,17 @@ public class EntityManager {
 		Class<?> entityClass = entity.getClass();
 		_verifyIsEntity(entityClass);
 
-		String table = tableNameCache.get(entityClass);
-		if (table == null) {
-			table = entityClass.getAnnotation(Entity.class).table();
-			tableNameCache.put(entityClass, table);
-		}
+		String tableName = tableNameCache.get(entityClass);
+		if (tableName == null) {
+			tableName = entityClass.getAnnotation(Entity.class).table();
+			tableNameCache.put(entityClass, tableName);
 
+			// We will only need to do this the first time as well
+			if (this._dbManager.getMode() == DbManager.AUTO) {
+				createTable(tableName, entity);
+			}
+		}
+		
 		List<Pair<Field, Column>> fieldColumnPairs = this._getColumns(entityClass);
 		Field pkColumn = this._getPK(entityClass, fieldColumnPairs);
 		String pkColumnName = pkColumn.getAnnotation(Column.class).name().toString();
@@ -83,7 +88,7 @@ public class EntityManager {
 		// If the primary key is 0, insert
 		if (values.getAsLong(pkColumnName) == 0) {
 			values.remove(pkColumnName);
-			long pkValue = _dbManager.getDb().insert(table, null, values);
+			long pkValue = _dbManager.getDb().insert(tableName, null, values);
 			try {
 				pkColumn.setLong(entity, pkValue);
 			} catch (IllegalArgumentException e) {
@@ -97,7 +102,14 @@ public class EntityManager {
 		else {
 			long pkValue = values.getAsLong(pkColumnName);
 			values.remove(pkColumnName);
-			return _dbManager.getDb().update(table, values, pkColumnName + "=" + pkValue, null) > 0;
+			return _dbManager.getDb().update(tableName, values, pkColumnName + "=" + pkValue, null) > 0;
+		}
+	}
+
+	private void createTable(String table, Object entity) {
+		Cursor c = _dbManager.getDb().rawQuery("SELECT DISTINCT tbl_name FROM sqlite_master WHERE tbl_name = '" + table + "'", null);
+		if (c.getCount() == 0) {
+			createTables(false, entity.getClass());
 		}
 	}
 

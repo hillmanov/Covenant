@@ -14,7 +14,6 @@ public class Covenant extends Activity {
         
         EntityManager.init(new DbManager(getBaseContext()));
 		EntityManager em = EntityManager.getInstance();
-		em.createTables(true, Person.class);
 		
 		Person scott = new Person();
 		scott.setFirstName("Scott");
