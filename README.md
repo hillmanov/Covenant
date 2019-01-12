@@ -10,7 +10,7 @@ By simple, I mean really simple.
 
 ### Why? What are you trying to solve with this? ###
 
-I like working with objects when I can. If I am going to pull stuff out of a database, I would rather be working with obejcts than with cursors. The other options out there were either too heavy, or too much work to setup. Also, I wanted to learn about Java annotations and this was the perfect project for just that. 
+I like working with objects when I can. If I am going to pull stuff out of a database, I would rather be working with objects than with cursors. The other options out there were either too heavy, or too much work to setup. Also, I wanted to learn about Java annotations and this was the perfect project for just that. 
 
 ### Enough talk. Show some code ###
 
@@ -125,7 +125,7 @@ That's it. em.save returns true on successful insertion, or false if it failed.
     
 ### What does it NOT do? ###
 
-Lots. It is meant to be simple wihthout lots of bells and whistles. However, the biggest missing piece is:
+Lots. It is meant to be simple without lots of bells and whistles. However, the biggest missing piece is:
 
 * Relationships. No joins, nothing. I am trying to keep the code and implementation simple, that would make it not simple. 
 
